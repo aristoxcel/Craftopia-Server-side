@@ -15,8 +15,8 @@ app.use(express.json());
 
 
 
-// const uri = "mongodb+srv://<username>:<password>@cluster0.kdbwfxu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-const uri = "mongodb+srv://craftopia:xvjJrJSi55rDg0Xx@cluster0.kdbwfxu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.kdbwfxu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -32,7 +32,13 @@ async function run() {
    
     // await client.connect();
     const craftCollection = client.db('craftDB').collection('craft')
+    const catCollection = client.db('FixedDb').collection('catDb')
 
+
+    app.get('/cat', async(req, res)=>{
+      const result = await catCollection.find().toArray()
+      res.send(result)
+  })
 
 app.get('/craft', async(req, res)=>{
     const result = await craftCollection.find().toArray()
