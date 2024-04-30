@@ -24,7 +24,6 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-  //  asdfasdfasdfsadfasdfasdf
     // await client.connect();
     const craftCollection = client.db('craftDB').collection('craft')
     const catCollection = client.db('FixedDb').collection('catDb')
@@ -40,11 +39,34 @@ app.get('/craft', async(req, res)=>{
     res.send(result)
 })
 
+
+app.get('/craft/:id', async(req, res)=>{
+  const id = req.params.id
+  const query = {_id : new ObjectId(id)}
+  const result = await craftCollection.findOne(query)
+  res.send(result)
+})
+
+
+app.get('/allitem/craft/:id', async(req, res)=>{
+  const id = req.params.id
+  const query = {_id : new ObjectId(id)}
+  const result = await craftCollection.findOne(query)
+  res.send(result)
+})
+
 app.post('/craft', async(req, res)=>{
     const craft =req.body;
     console.log(craft)
     const result = await craftCollection.insertOne(req.body)
     res.send(result)
+})
+
+app.delete('/craft/:id', async(req, res)=>{
+  const id = req.params.id
+  const query= {_id: new ObjectId(id)}
+  const result = await craftCollection.deleteOne(query)
+  res.send(result)
 })
 
 
